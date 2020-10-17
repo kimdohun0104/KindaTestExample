@@ -24,8 +24,16 @@ class CountViewModelTest : KindaViewModelTest<CountState, CountEvent, CountSideE
     }
 
     @Test
+    fun `Increase and Decrease, maintain count=0`() {
+        listOf(CountEvent.Increase, CountEvent.Decrease) expectState { state ->
+            assertEquals(0, state.count)
+        }
+    }
+
+    @Test
     fun `AttemptRequestCount, receive count=400`() = runBlocking {
-        `when`(countRepository.requestCount()).thenReturn(400)
+        `when`(countRepository.requestCount())
+            .thenReturn(400)
 
         CountEvent.AttemptRequestCount expectState { state ->
             assertEquals(400, state.count)
